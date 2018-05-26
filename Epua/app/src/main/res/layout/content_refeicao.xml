@@ -24,13 +24,12 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/tv_canteen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:textSize="22sp"
-                    android:text="Canteen"
-                    android:id="@+id/tv_canteen"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_meal"
@@ -40,9 +39,8 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="5dp"
                     android:layout_marginStart="5dp"
-                    android:text="weekday"
-                    android:textStyle="bold"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -66,10 +64,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="5dp"
-                    android:paddingVertical="10dp"
                     android:layout_marginStart="5dp"
-                    android:textSize="20sp"
-                    android:text="disabled"/>
+                    android:paddingVertical="10dp"
+                    android:textSize="20sp" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -86,24 +83,23 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/tv_title_sopa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="5dp"
+                android:text="@string/tv_sopa"
                 android:textSize="22sp"
-                android:id="@+id/tv_title_sopa"
-                android:textStyle="bold"
-                android:text="Sopa"/>
+                android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_content_sopa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/tv_title_sopa"
-                android:layout_margin="5dp"
-                android:id="@+id/tv_content_sopa"
-                android:text="Content"/>
+                android:layout_margin="5dp" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
@@ -121,87 +117,83 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/tv_title_prato"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="5dp"
+                    android:text="@string/tv_prato"
                     android:textSize="22sp"
-                    android:id="@+id/tv_title_prato"
-                    android:textStyle="bold"
-                    android:text="Prato"/>
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_title_prato_carne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tv_title_prato"
                     android:layout_margin="5dp"
-                    android:id="@+id/tv_title_prato_carne"
-                    android:text="Prato carne"/>
+                    android:text="@string/tv_carne" />
 
                 <TextView
                     android:id="@+id/tv_content_carne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/tv_title_prato_carne"
                     android:layout_alignBaseline="@+id/tv_title_prato_carne"
-                    android:text="Content" />
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/tv_title_prato_carne" />
 
                 <TextView
                     android:id="@+id/tv_title_prato_peixe"
-                    android:text="Prato peixe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tv_content_carne"
-                    android:layout_margin="5dp" />
+                    android:layout_margin="5dp"
+                    android:text="@string/tv_peixe" />
 
                 <TextView
                     android:id="@+id/tv_content_peixe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/tv_title_prato_peixe"
                     android:layout_alignBaseline="@+id/tv_title_prato_peixe"
-                    android:text="Content" />
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/tv_title_prato_peixe" />
 
                 <TextView
                     android:id="@+id/tv_title_prato_dieta"
-                    android:text="Prato dieta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tv_content_peixe"
-                    android:layout_margin="5dp" />
+                    android:layout_margin="5dp"
+                    android:text="@string/tv_dieta" />
 
                 <TextView
                     android:id="@+id/tv_content_dieta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/tv_title_prato_dieta"
                     android:layout_alignBaseline="@+id/tv_title_prato_dieta"
-                    android:text="Content" />
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/tv_title_prato_dieta" />
 
                 <TextView
                     android:id="@+id/tv_title_prato_veget"
-                    android:text="Prato Vegetariano"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tv_content_dieta"
-                    android:layout_margin="5dp" />
+                    android:layout_margin="5dp"
+                    android:text="@string/tv_veget" />
 
                 <TextView
                     android:id="@+id/tv_content_veget"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/tv_title_prato_veget"
                     android:layout_alignBaseline="@+id/tv_title_prato_veget"
-                    android:text="Content" />
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/tv_title_prato_veget" />
 
                 <TextView
                     android:id="@+id/tv_title_opcao"
@@ -210,16 +202,15 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tv_content_veget"
                     android:layout_margin="5dp"
-                    android:text="Opção"/>
+                    android:text="@string/tv_opcao" />
 
                 <TextView
                     android:id="@+id/tv_content_opcao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/tv_title_opcao"
                     android:layout_alignBaseline="@+id/tv_title_opcao"
-                    android:text="Content" />
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/tv_title_opcao" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -237,24 +228,23 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/tv_title_salada"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="5dp"
+                    android:text="@string/tv_salada"
                     android:textSize="22sp"
-                    android:id="@+id/tv_title_salada"
-                    android:textStyle="bold"
-                    android:text="Salada"/>
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_content_salada"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tv_title_salada"
-                    android:layout_margin="5dp"
-                    android:id="@+id/tv_content_salada"
-                    android:text="Content"/>
+                    android:layout_margin="5dp" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -272,24 +262,23 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/tv_title_diversos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="5dp"
+                    android:text="@string/tv_diversos"
                     android:textSize="22sp"
-                    android:id="@+id/tv_title_diversos"
-                    android:textStyle="bold"
-                    android:text="Diversos"/>
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_content_diversos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tv_title_diversos"
-                    android:layout_margin="5dp"
-                    android:id="@+id/tv_content_diversos"
-                    android:text="Content"/>
+                    android:layout_margin="5dp" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -307,24 +296,23 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/tv_title_sobremesa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="5dp"
+                    android:text="@string/tv_sobremesa"
                     android:textSize="22sp"
-                    android:id="@+id/tv_title_sobremesa"
-                    android:textStyle="bold"
-                    android:text="Sobremesa"/>
+                    android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tv_content_sobremesa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/tv_title_sobremesa"
-                    android:layout_margin="5dp"
-                    android:id="@+id/tv_content_sobremesa"
-                    android:text="Content"/>
+                    android:layout_margin="5dp" />
             </RelativeLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>

@@ -4,4 +4,21 @@
     <string name="menu_refresh">Actualizar</string>
     <string name="epua">EP\nUA</string>
     <string name="title_activity_parques">Parques UA</string>
+    <string name="bt_ementas">bt_ementas</string>
+    <string name="bt_parques">bt_parques</string>
+    <string name="tv_ementas">Ementas</string>
+    <string name="tv_parques">Parques</string>
+    <string name="tv_local">Local</string>
+    <string name="tv_parque">Parque</string>
+    <string name="tv_livres">Livres</string>
+    <string name="tv_sopa">Sopa</string>
+    <string name="tv_prato">Prato</string>
+    <string name="tv_carne">Prato carne</string>
+    <string name="tv_peixe">Prato peixe</string>
+    <string name="tv_dieta">Prato dieta</string>
+    <string name="tv_veget">Prato vegetariano</string>
+    <string name="tv_opcao">Opção</string>
+    <string name="tv_salada">Salada</string>
+    <string name="tv_diversos">Diversos</string>
+    <string name="tv_sobremesa">Sobremesa</string>
 </resources>

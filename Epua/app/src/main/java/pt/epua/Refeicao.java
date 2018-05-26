@@ -312,7 +312,7 @@ public class Refeicao extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-        queue.getCache().clear();
+        //queue.getCache().clear();
         queue.add(request);
     }
 

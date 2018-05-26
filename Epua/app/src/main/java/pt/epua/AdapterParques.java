@@ -50,6 +50,7 @@ public class AdapterParques extends BaseAdapter {
         int capacidade = parque.capacidade;
         double ocupado = capacidade-livre;
         double ratio = ( ocupado/capacidade) * 100;
+
         // 100% red 75% yellow 50% green
         Log.v("capacidade",String.valueOf(capacidade));
         Log.v("livre",String.valueOf(livre));
@@ -57,9 +58,6 @@ public class AdapterParques extends BaseAdapter {
         if (ratio==100) status.setImageResource(R.drawable.cancel);
         if (ratio<100 && ratio>=75) status.setImageResource(R.drawable.attention);
         if (ratio<75) status.setImageResource(R.drawable.check);
-
-
-
 
         //Views populate
         tv_id.setText(parque.getId());

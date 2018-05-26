@@ -2,7 +2,6 @@ package pt.epua;
 //TODO swipe to refresh
 //TODO location dos parques
 //TODO Sort parques por location
-//TODO Senhas????
 //TODO menu sobre?
 //TODO menu c opcoes : so mostar almocos, mudar tempo do timeout
 //TODO mudar lista p recyclerview
@@ -14,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
