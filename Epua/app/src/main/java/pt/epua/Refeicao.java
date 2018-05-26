@@ -190,7 +190,7 @@ public class Refeicao extends AppCompatActivity {
 
                                         }
                                     }
-                                    //Rest. Univ não contem objecto jantar - fix
+                                    //SNACK-BAR não contem objecto jantar - fix
                                     cantina = new Cantina(canteen, weekday, "Jantar", encerrado);
                                     cantinaArray.add(cantina);
                                 }
@@ -312,7 +312,7 @@ public class Refeicao extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
-        //queue.getCache().clear();
+        queue.getCache().clear();
         queue.add(request);
     }
 

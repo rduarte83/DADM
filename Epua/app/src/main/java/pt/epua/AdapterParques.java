@@ -1,9 +1,6 @@
 package pt.epua;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.support.annotation.DrawableRes;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -43,7 +40,8 @@ public class AdapterParques extends BaseAdapter {
         TextView tv_id = vw.findViewById(R.id.tv_id);
         TextView tv_nome = vw.findViewById(R.id.tv_nome);
         TextView tv_livre = vw.findViewById(R.id.tv_livre);
-        ImageView status = vw.findViewById(R.id.status);
+        TextView tv_distancia = vw.findViewById(R.id.tv_distancia);
+        ImageView status = vw.findViewById(R.id.tv_status);
 
         Parque parque = parqueList.get(i);
         int livre = parque.livre;
@@ -52,9 +50,6 @@ public class AdapterParques extends BaseAdapter {
         double ratio = ( ocupado/capacidade) * 100;
 
         // 100% red 75% yellow 50% green
-        Log.v("capacidade",String.valueOf(capacidade));
-        Log.v("livre",String.valueOf(livre));
-        Log.v("ratio",String.valueOf(ratio));
         if (ratio==100) status.setImageResource(R.drawable.cancel);
         if (ratio<100 && ratio>=75) status.setImageResource(R.drawable.attention);
         if (ratio<75) status.setImageResource(R.drawable.check);
@@ -63,7 +58,7 @@ public class AdapterParques extends BaseAdapter {
         tv_id.setText(parque.getId());
         tv_nome.setText(parque.getNome());
         tv_livre.setText(String.valueOf(parque.getLivre()));
-
+        tv_distancia.setText(String.valueOf(parque.getDistancia()));
         return vw;
     }
 }

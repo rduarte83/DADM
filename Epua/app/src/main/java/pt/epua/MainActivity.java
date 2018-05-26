@@ -8,6 +8,7 @@ package pt.epua;
 //TODO Loading bar (progress bar)
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,12 @@ public class MainActivity extends AppCompatActivity {
 
     ImageButton bt1, bt2;
     Context ctx;
+
+    long timeout = 5000;
+
+    SharedPreferences sharedPreferences;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        mHandler.postDelayed(runnable, 5000L);
+        mHandler.postDelayed(runnable, timeout);
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
