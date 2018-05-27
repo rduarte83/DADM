@@ -43,7 +43,7 @@ public class Parques extends AppCompatActivity {
     private Activity act;
     //location api
     private FusedLocationProviderClient mFusedLocationClient;
-
+    private static final int REQUEST_CODE_PERMISSION = 2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,10 @@ public class Parques extends AppCompatActivity {
         //location
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_PERMISSION);
+            return;
+        }
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
@@ -96,11 +100,12 @@ public class Parques extends AppCompatActivity {
                                     l.setLatitude(obj.getDouble("Latitude"));
                                     l.setLongitude(obj.getDouble("Longitude"));
 
-                                    distancia = l.distanceTo(here)/1000;
-                                    distancia = (float)Math.round(distancia * 10) / 10;
-
                                     Log.v("Latitude: ", String.valueOf(l.getLatitude()));
                                     Log.v("Longitude: ", String.valueOf(l.getLongitude()));
+
+                                    distancia = (l.distanceTo(here))/1000;
+                                    distancia = (float)Math.round(distancia * 10) / 10;
+
                                     Log.v("Distancia: ", String.valueOf(distancia));
 
                                     if (livre > capacidade) livre = capacidade;

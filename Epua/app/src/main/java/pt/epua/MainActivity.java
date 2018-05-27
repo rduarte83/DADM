@@ -1,7 +1,6 @@
 package pt.epua;
 //TODO swipe to refresh
-//TODO location dos parques
-//TODO Sort parques por location
+//TODO sort dos parques
 //TODO menu sobre?
 //TODO menu c opcoes : so mostar almocos, mudar tempo do timeout
 //TODO mudar lista p recyclerview
