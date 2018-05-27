@@ -1,7 +1,19 @@
 package pt.epua;
 
-public class Cantina {
-    String canteen, meal, weekday, sopa, carne, peixe, dieta, veget, opcao, salada, diversos, sobremesa, disabled;
+class Cantina {
+    private final String canteen;
+    private final String meal;
+    private final String weekday;
+    private String sopa;
+    private String carne;
+    private String peixe;
+    private String dieta;
+    private String veget;
+    private String opcao;
+    private String salada;
+    private String diversos;
+    private String sobremesa;
+    private final String disabled;
 
     public Cantina(String canteen, String weekday, String meal, String sopa, String carne, String peixe, String dieta, String veget, String opcao, String salada, String diversos, String sobremesa, String disabled) {
         this.canteen = canteen;
@@ -28,10 +40,6 @@ public class Cantina {
 
     public String getDisabled() {
         return disabled;
-    }
-
-    public String getCanteen() {
-        return canteen;
     }
 
     public String getMeal() {

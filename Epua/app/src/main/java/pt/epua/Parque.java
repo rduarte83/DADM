@@ -1,9 +1,11 @@
 package pt.epua;
 
-public class Parque {
-    String id, nome;
-    int capacidade, livre;
-    float distancia;
+class Parque {
+    private final String id;
+    private final String nome;
+    public final int livre;
+    public final int capacidade;
+    private final float distancia;
 
     public Parque(String id, String nome, int capacidade, int livre, float distancia) {
         this.id = id;
@@ -25,7 +27,9 @@ public class Parque {
         return livre;
     }
 
-    public float getDistancia() {
-        return distancia;
-    }
+    public int getCapacidade() { return capacidade; }
+
+    public float getDistancia() { return distancia; }
+
+
 }

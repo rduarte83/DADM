@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class Cantinas extends AppCompatActivity {
 
-    private TextView tv;
     private Context ctx;
     private Button bt1, bt2, bt3, bt4, bt5, bt6;
 
@@ -20,7 +21,7 @@ public class Cantinas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cantinas);
         ctx = this.getApplicationContext();
-        tv = findViewById(R.id.tv);
+        TextView tv = findViewById(R.id.tv);
         bt1 = findViewById(R.id.bt1);
         bt2 = findViewById(R.id.bt2);
         bt3 = findViewById(R.id.bt3);
@@ -85,11 +86,11 @@ public class Cantinas extends AppCompatActivity {
             }
         });
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        //back button
         if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;

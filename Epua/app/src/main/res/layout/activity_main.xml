@@ -14,7 +14,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
-        app:srcCompat="@drawable/logo_ua" />
+        app:srcCompat="@drawable/logo_ua"
+        android:contentDescription="@string/iv_logo"
+        tools:targetApi="26" />
 
     <TextView
         android:id="@+id/tvapp"
@@ -78,4 +80,5 @@
             android:textAlignment="center"
             android:textSize="18sp" />
     </LinearLayout>
+
 </RelativeLayout>

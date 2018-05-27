@@ -1,11 +1,9 @@
 package pt.epua;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,22 +21,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Refeicao extends AppCompatActivity {
     private ArrayList<Cantina> cantinaArray;
     private RequestQueue queue;
-    private TextView tvCanteen, tvMeal, tvSopa, tvCarne, tvPeixe, tvDieta, tvVeget, tvOpcao, tvSalada, tvDiversos, tvSobremesa, tvDisabled;
+    private TextView tvCanteen;
+    private TextView tvMeal;
+    private TextView tvSopa;
+    private TextView tvCarne;
+    private TextView tvPeixe;
+    private TextView tvDieta;
+    private TextView tvVeget;
+    private TextView tvOpcao;
+    private TextView tvSalada;
+    private TextView tvDiversos;
+    private TextView tvSobremesa;
     private Cantina cantina;
     private String zona, canteen, weekday, meal, sopa, carne, peixe, dieta, veget, opcao, salada, diversos, sobremesa, disabled;
-    private String nd = "Não disponível";
-    private String encerrado = "Encerrado";
+    private final String nd = "Não disponível";
+    private final String encerrado = "Encerrado";
     private int mealType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refeicao);
-        zona = this.getIntent().getExtras().getString("bt_txt");
+        zona = Objects.requireNonNull(this.getIntent().getExtras()).getString("bt_txt");
 
         cantinaArray = new ArrayList<>();
 
@@ -60,7 +69,7 @@ public class Refeicao extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
-    public void parseJSON() {
+    private void parseJSON() {
         String url = "http://services.web.ua.pt/sas/ementas?date=week&place=all&format=json";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -316,7 +325,7 @@ public class Refeicao extends AppCompatActivity {
         queue.add(request);
     }
 
-    public void trataJSON() {
+    private void trataJSON() {
 
         switch (mealType) {
             case 0:
@@ -329,10 +338,10 @@ public class Refeicao extends AppCompatActivity {
                 break;
         }
         //back button
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
-    public void insereJSON(int mealType) {
+    private void insereJSON(int mealType) {
         this.mealType = mealType;
 
         String ptWeekday = cantina.getWeekday();
@@ -388,7 +397,7 @@ public class Refeicao extends AppCompatActivity {
             card_diversos.setVisibility(View.GONE);
             card_sobremesa.setVisibility(View.GONE);
 
-            tvDisabled = findViewById(R.id.tv_disabled);
+            TextView tvDisabled = findViewById(R.id.tv_disabled);
             tvDisabled.setText(cantinaArray.get(mealType).getDisabled());
 
 

@@ -4,5 +4,6 @@
     tools:context="pt.epua.Refeicao">
     <item
         android:id="@+id/menu_meal"
+        android:title=""
         app:showAsAction="always" />
 </menu>

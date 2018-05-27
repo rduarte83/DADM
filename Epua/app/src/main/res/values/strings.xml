@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Estga</string>
-    <string name="title_activity_prato">Prato</string>
     <string name="menu_refresh">Actualizar</string>
     <string name="epua">EP\nUA</string>
     <string name="title_activity_parques">Parques UA</string>
@@ -21,4 +19,8 @@
     <string name="tv_salada">Salada</string>
     <string name="tv_diversos">Diversos</string>
     <string name="tv_sobremesa">Sobremesa</string>
+    <string name="tv_distancia">Km</string>
+    <string name="iv_status">status</string>
+    <string name="iv_logo">logo</string>
+    <string name="menu_timeout">Timeout</string>
 </resources>

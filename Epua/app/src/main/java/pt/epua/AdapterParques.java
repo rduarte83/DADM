@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class AdapterParques extends BaseAdapter {
+class AdapterParques extends BaseAdapter {
 
     private final List<Parque> parqueList;
     private final Activity act;

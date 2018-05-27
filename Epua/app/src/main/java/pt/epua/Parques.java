@@ -4,9 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -28,7 +28,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class Parques extends AppCompatActivity {
     private List<Parque> parqueList;
@@ -36,21 +39,38 @@ public class Parques extends AppCompatActivity {
     private String id, nome;
     private int capacidade, livre;
     private Location l, here;
-    private Float distancia;
+    private float distancia;
     private Parque parque;
     private RequestQueue queue;
     private AdapterParques adapter;
     private Activity act;
-    //location api
-    private FusedLocationProviderClient mFusedLocationClient;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private static final int REQUEST_CODE_PERMISSION = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parques);
+        /*
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-        //location
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_PERMISSION);
+            return;
+        }
+
+        if (lm != null) {
+            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            Log.v("HERE Lat: ", String.valueOf(lat));
+            Log.v("HERE Lon: ", String.valueOf(lon));
+        }
+        */
+        //location API
+        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_PERMISSION);
@@ -65,8 +85,10 @@ public class Parques extends AppCompatActivity {
                         if (location != null) {
                             // Logic to handle location object
                             here = location;
-                            here.getLatitude();
-                            here.getLongitude();
+                            double lat = location.getLatitude();
+                            double lon = location.getLongitude();
+                            Log.v("HERE Lat: ", String.valueOf(lat));
+                            Log.v("HERE Lon: ", String.valueOf(lon));
                         }
                     }
                 });
@@ -78,11 +100,31 @@ public class Parques extends AppCompatActivity {
         act = this;
         lv = findViewById(R.id.lv);
 
+        mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
+
+        /*
+         * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
+         * performs a swipe-to-refresh gesture.
+         */
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("", "onRefresh called from SwipeRefreshLayout");
+
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                        parseJSON();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }
+        );
+
         parseJSON();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
-        public void parseJSON() {
+        private void parseJSON() {
             String url = "http://services.web.ua.pt/parques/parques";
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONArray>() {
@@ -100,20 +142,28 @@ public class Parques extends AppCompatActivity {
                                     l.setLatitude(obj.getDouble("Latitude"));
                                     l.setLongitude(obj.getDouble("Longitude"));
 
-                                    Log.v("Latitude: ", String.valueOf(l.getLatitude()));
-                                    Log.v("Longitude: ", String.valueOf(l.getLongitude()));
+                                    Log.v("PARQUE Lat: ", String.valueOf(l.getLatitude()));
+                                    Log.v("PARQUE Lon: ", String.valueOf(l.getLongitude()));
 
-                                    distancia = (l.distanceTo(here))/1000;
-                                    distancia = (float)Math.round(distancia * 10) / 10;
+                                    distancia = (l.distanceTo(here)) / 1000;
+                                    distancia = (float) Math.round(distancia * 10) / 10;
 
                                     Log.v("Distancia: ", String.valueOf(distancia));
 
                                     if (livre > capacidade) livre = capacidade;
-                                    if (livre < 0) livre=0;
+                                    if (livre < 0) livre = 0;
 
                                     parque = new Parque(id, nome, capacidade, livre, distancia);
                                     parqueList.add(parque);
 
+                                }
+                                //Sort do array por distância
+                                Collections.sort(parqueList, new Comparator<Parque>() {
+                                    public int compare(Parque p1, Parque p2) {
+                                        return  Float.compare(p1.getDistancia(), p2.getDistancia());
+                                    }
+                                });
+                                for (int i = 1; i < response.length(); i++) {
                                     adapter = new AdapterParques(parqueList, act);
                                     lv.setAdapter(adapter);
                                 }
@@ -130,12 +180,32 @@ public class Parques extends AppCompatActivity {
 
             queue.getCache().clear();
             queue.add(request);
+
+            //Limpar a lista e parar o refresh
+            parqueList.clear();
+            mSwipeRefreshLayout.setRefreshing(false);
         }
+
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        //back button
         if (item.getItemId() == android.R.id.home) {
             this.finish();
+            return true;
+        }
+        // Check if user triggered a refresh:
+        if (item.getItemId() == R.id.menu_refresh) {
+            Log.i("", "Refresh menu item selected");
+
+            // Signal SwipeRefreshLayout to start the progress indicator
+            mSwipeRefreshLayout.setRefreshing(true);
+
+            // Start the refresh background task.
+            // This method calls setRefreshing(false) when it's finished.
+            parseJSON();
             return true;
         }
         return super.onOptionsItemSelected(item);
