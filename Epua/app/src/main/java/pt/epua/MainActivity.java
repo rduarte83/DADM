@@ -1,21 +1,24 @@
 package pt.epua;
 //TODO menu sobre?
 //TODO menu c opcoes : so mostar almocos, mudar tempo do timeout
-//TODO mudar lista p recyclerview
-//TODO Loading bar (progress bar)
+
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 public class MainActivity extends AppCompatActivity {
 
     private Context ctx;
+    private CountDownTimer cdt;
+    private ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +30,27 @@ public class MainActivity extends AppCompatActivity {
         ImageButton bt1 = findViewById(R.id.bt1);
         ImageButton bt2 = findViewById(R.id.bt2);
 
-        //Start activity after 5000ms
-        final Handler mHandler = new Handler();
+        pb = findViewById(R.id.pb);
+
+        //Start activity after timeout(ms)
+        final int timeout = 10000;
+
+        cdt = new CountDownTimer (timeout, 1000) {
+            public void onTick(long millisUntilFinished) {
+                int delta = (int)(timeout - millisUntilFinished)/100;
+                pb.setProgress(delta);
+                Log.v("seconds remaining:",String.valueOf(millisUntilFinished / 1000));
+                Log.v("Progress:",String.valueOf(delta));
+            }
+            public void onFinish() {
+                Intent it = new Intent(ctx, Parques.class);
+                startActivity(it);
+                pb.setVisibility(View.INVISIBLE);
+                Log.v("Timer: ","DONE!");
+            }
+        }.start();
+
+        /*final Handler mHandler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -37,12 +59,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        long timeout = 5000;
-        mHandler.postDelayed(runnable, timeout);
+        mHandler.postDelayed(runnable, timeout);*/
+
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mHandler.removeCallbacks(runnable);
+                //Cancel Timer
+                //mHandler.removeCallbacks(runnable);
+                cdt.cancel();
                 Intent it = new Intent(ctx, Cantinas.class);
                 startActivity(it);
             }
@@ -50,7 +74,9 @@ public class MainActivity extends AppCompatActivity {
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mHandler.removeCallbacks(runnable);
+                //Cancel Timer
+                //mHandler.removeCallbacks(runnable);
+                cdt.cancel();
                 Intent it = new Intent(ctx, Parques.class);
                 startActivity(it);
             }

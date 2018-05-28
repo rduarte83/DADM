@@ -27,9 +27,5 @@ class Parque {
         return livre;
     }
 
-    public int getCapacidade() { return capacidade; }
-
     public float getDistancia() { return distancia; }
-
-
 }

@@ -1,17 +1,18 @@
 package pt.epua;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,18 +36,18 @@ import java.util.Objects;
 
 public class Parques extends AppCompatActivity {
     private List<Parque> parqueList;
-    private ListView lv;
+    private Parque parque;
     private String id, nome;
     private int capacidade, livre;
-    private Location l, here;
     private float distancia;
-    private Parque parque;
+
+    private AdapterParques mAdapter;
+
     private RequestQueue queue;
-    private AdapterParques adapter;
-    private Activity act;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private Location l, here;
     private static final int REQUEST_CODE_PERMISSION = 2;
 
     @Override
@@ -65,8 +66,8 @@ public class Parques extends AppCompatActivity {
             location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             double lat = location.getLatitude();
             double lon = location.getLongitude();
-            Log.v("HERE Lat: ", String.valueOf(lat));
-            Log.v("HERE Lon: ", String.valueOf(lon));
+            Log.a("HERE Lat: ", String.valueOf(lat));
+            Log.a("HERE Lon: ", String.valueOf(lon));
         }
         */
         //location API
@@ -87,7 +88,7 @@ public class Parques extends AppCompatActivity {
                             here = location;
                             double lat = location.getLatitude();
                             double lon = location.getLongitude();
-                            Log.v("HERE Lat: ", String.valueOf(lat));
+                            Log.i("HERE Lat: ", String.valueOf(lat));
                             Log.v("HERE Lon: ", String.valueOf(lon));
                         }
                     }
@@ -97,11 +98,16 @@ public class Parques extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
 
         parqueList = new ArrayList<>();
-        act = this;
-        lv = findViewById(R.id.lv);
+
+        RecyclerView recyclerView = findViewById(R.id.rv);
+
+        mAdapter = new AdapterParques(parqueList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
-
         /*
          * Sets up a SwipeRefreshLayout.OnRefreshListener that is invoked when the user
          * performs a swipe-to-refresh gesture.
@@ -110,8 +116,7 @@ public class Parques extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Log.i("", "onRefresh called from SwipeRefreshLayout");
-
+                        Log.v("", "onRefresh called from SwipeRefreshLayout");
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
                         parseJSON();
@@ -156,6 +161,7 @@ public class Parques extends AppCompatActivity {
                                     parque = new Parque(id, nome, capacidade, livre, distancia);
                                     parqueList.add(parque);
 
+                                    mAdapter.notifyDataSetChanged();
                                 }
                                 //Sort do array por distância
                                 Collections.sort(parqueList, new Comparator<Parque>() {
@@ -163,10 +169,6 @@ public class Parques extends AppCompatActivity {
                                         return  Float.compare(p1.getDistancia(), p2.getDistancia());
                                     }
                                 });
-                                for (int i = 1; i < response.length(); i++) {
-                                    adapter = new AdapterParques(parqueList, act);
-                                    lv.setAdapter(adapter);
-                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -178,16 +180,15 @@ public class Parques extends AppCompatActivity {
                 }
             });
 
+            //Limpar a cache
             queue.getCache().clear();
+
             queue.add(request);
 
             //Limpar a lista e parar o refresh
             parqueList.clear();
             mSwipeRefreshLayout.setRefreshing(false);
         }
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -198,7 +199,7 @@ public class Parques extends AppCompatActivity {
         }
         // Check if user triggered a refresh:
         if (item.getItemId() == R.id.menu_refresh) {
-            Log.i("", "Refresh menu item selected");
+            Log.v("", "Refresh menu item selected");
 
             // Signal SwipeRefreshLayout to start the progress indicator
             mSwipeRefreshLayout.setRefreshing(true);
