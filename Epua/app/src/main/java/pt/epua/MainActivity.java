@@ -6,26 +6,57 @@ package pt.epua;
 //TODO mudar p jantar a partir duma determinada hora
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity{
     private Context ctx;
     private CountDownTimer cdt;
     private ProgressBar pb;
+    private NumberPicker np;
+
+
+    public void createPicker () {
+        // Get the layout inflater
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Inflate and set the layout for the dialog
+        LayoutInflater inflater = this.getLayoutInflater();
+        // dialog layout)
+        builder.setTitle("Defina o tempo (seg)");
+        builder.setMessage("Escolha um número:");
+
+        View dialogView = inflater.inflate(R.layout.dialog, null);
+        builder.setView(dialogView);
+        np = dialogView.findViewById(R.id.dialog_number_picker);
+        np.setMaxValue(60);
+        np.setMinValue(1);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        int timeout = np.getValue();
+                        Log.v("TIMEOUT: ", "" + timeout);
+                    }
+                });
+
+        builder.create();
+        builder.show();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,11 +126,10 @@ public class MainActivity extends AppCompatActivity {
                 //mHandler.removeCallbacks(runnable);
                 cdt.cancel();
                 pb.setVisibility(View.INVISIBLE);
-
-
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //back button
@@ -107,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
             this.finish();
             return true;
         }
+        if (item.getItemId() == R.id.menu_timeout) {
+            createPicker();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
