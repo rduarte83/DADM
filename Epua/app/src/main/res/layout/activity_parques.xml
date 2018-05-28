@@ -39,7 +39,7 @@
 
             <TextView
                 android:id="@+id/tv_distancia"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/tv_livre"
                 android:layout_margin="5dp"

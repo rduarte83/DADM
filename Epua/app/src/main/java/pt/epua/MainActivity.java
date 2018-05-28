@@ -20,8 +20,6 @@ import android.widget.ProgressBar;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
         pb = findViewById(R.id.pb);
 
         Calendar calendar = new GregorianCalendar();
-        Calendar now = calendar.getInstance();
-
-        int hour = now.get(Calendar.HOUR_OF_DAY);
+        //data actual
+        Date now = calendar.getTime();
+        //hora actual
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
         Log.v("AGORA: ", now.toString());
         Log.v("HORA: ", String.valueOf(hour));
         //Start activity after timeout(ms)
@@ -54,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 int delta = (int)(timeout - millisUntilFinished)/100;
                 pb.setProgress(delta);
-                Log.v("seconds remaining:",String.valueOf(millisUntilFinished / 1000));
-                Log.v("Progress:",String.valueOf(delta));
+                Log.v("Remaining: ",String.valueOf(millisUntilFinished / 1000));
+                Log.v("Progress: ",String.valueOf(delta));
             }
             public void onFinish() {
                 pb.setVisibility(View.INVISIBLE);
                 Intent it = new Intent(ctx, Parques.class);
                 startActivity(it);
-                Log.v("Timer: ","DONE!");
+                Log.v("Sucess","DONE!");
             }
         }.start();
 
