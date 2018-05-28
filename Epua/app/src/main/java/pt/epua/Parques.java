@@ -126,6 +126,7 @@ public class Parques extends AppCompatActivity {
         );
 
         parseJSON();
+        //Back arrow
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 

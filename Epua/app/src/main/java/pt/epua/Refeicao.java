@@ -337,7 +337,7 @@ public class Refeicao extends AppCompatActivity {
                 mealType = 0;
                 break;
         }
-        //back button
+        //Back Arrow
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
@@ -370,8 +370,6 @@ public class Refeicao extends AppCompatActivity {
         }
 
         //use weekday in title
-
-
         tvCanteen.setText(canteen);
         tvMeal.setText(cantinaArray.get(mealType).getMeal());
 
@@ -389,7 +387,6 @@ public class Refeicao extends AppCompatActivity {
                 String msg = cantinaArray.get(mealType).getDisabled();
                 Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
                 */
-
             card_disable.setVisibility(View.VISIBLE);
             card_sopa.setVisibility(View.GONE);
             card_prato.setVisibility(View.GONE);

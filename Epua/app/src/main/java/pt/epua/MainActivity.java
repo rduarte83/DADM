@@ -1,6 +1,9 @@
 package pt.epua;
 //TODO menu sobre?
 //TODO menu c opcoes : so mostar almocos, mudar tempo do timeout
+//TODO mudar layouts (performance)
+//TODO recycler view performance???
+//TODO mudar p jantar a partir duma determinada hora
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
         pb = findViewById(R.id.pb);
 
+        Calendar calendar = new GregorianCalendar();
+        Calendar now = calendar.getInstance();
+
+        int hour = now.get(Calendar.HOUR_OF_DAY);
+        Log.v("AGORA: ", now.toString());
+        Log.v("HORA: ", String.valueOf(hour));
         //Start activity after timeout(ms)
         final int timeout = 10000;
 
@@ -43,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("Progress:",String.valueOf(delta));
             }
             public void onFinish() {
+                pb.setVisibility(View.INVISIBLE);
                 Intent it = new Intent(ctx, Parques.class);
                 startActivity(it);
-                pb.setVisibility(View.INVISIBLE);
                 Log.v("Timer: ","DONE!");
             }
         }.start();
@@ -64,21 +79,25 @@ public class MainActivity extends AppCompatActivity {
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent it = new Intent(ctx, Cantinas.class);
+                startActivity(it);
                 //Cancel Timer
                 //mHandler.removeCallbacks(runnable);
                 cdt.cancel();
-                Intent it = new Intent(ctx, Cantinas.class);
-                startActivity(it);
+                pb.setVisibility(View.INVISIBLE);
             }
         });
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent it = new Intent(ctx, Parques.class);
+                startActivity(it);
                 //Cancel Timer
                 //mHandler.removeCallbacks(runnable);
                 cdt.cancel();
-                Intent it = new Intent(ctx, Parques.class);
-                startActivity(it);
+                pb.setVisibility(View.INVISIBLE);
+
+
             }
         });
     }
