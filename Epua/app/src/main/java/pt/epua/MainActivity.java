@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         cdt = new CountDownTimer (timeout, 1000) {
             public void onTick(long millisUntilFinished) {
-                int delta = (int)(timeout - millisUntilFinished)/100;
+                int delta = (int)(timeout - millisUntilFinished)/(timeout/100);
                 pb.setProgress(delta);
                 Log.v("Remaining: ",String.valueOf(millisUntilFinished / 1000));
                 Log.v("Progress: ",String.valueOf(delta));
