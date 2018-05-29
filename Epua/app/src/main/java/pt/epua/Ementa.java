@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +22,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Objects;
 
-public class Refeicao extends AppCompatActivity {
+public class Ementa extends AppCompatActivity {
     private ArrayList<Cantina> cantinaArray;
     private RequestQueue queue;
     private TextView tvCanteen;
@@ -46,7 +50,7 @@ public class Refeicao extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_refeicao);
+        setContentView(R.layout.activity_ementa);
         zona = Objects.requireNonNull(this.getIntent().getExtras()).getString("bt_txt");
 
         cantinaArray = new ArrayList<>();
@@ -67,6 +71,7 @@ public class Refeicao extends AppCompatActivity {
 
         parseJSON();
         invalidateOptionsMenu();
+
     }
 
     private void parseJSON() {
@@ -309,7 +314,8 @@ public class Refeicao extends AppCompatActivity {
                                 break;
                             }
                             mealType = 0;
-                            trataJSON();
+                            verificaHora();
+                            verificaMeal();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -325,8 +331,7 @@ public class Refeicao extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void trataJSON() {
-
+    private void verificaMeal() {
         switch (mealType) {
             case 0:
                 insereJSON(mealType);
@@ -339,6 +344,27 @@ public class Refeicao extends AppCompatActivity {
         }
         //Back Arrow
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void verificaHora() {
+        Calendar calendar = new GregorianCalendar();
+        //data actual
+        Date now = calendar.getTime();
+        //hora actual
+        int afterLunch = 15;
+        int afterDinner = 21;
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        Log.v("AGORA: ", now.toString());
+        Log.v("HORA: ", String.valueOf(hour));
+
+        if (hour>=afterLunch && hour<afterDinner) {
+            insereJSON(mealType);
+            mealType = 1;
+        } else {
+            insereJSON(mealType);
+            mealType = 0;
+        }
     }
 
     private void insereJSON(int mealType) {
@@ -369,7 +395,6 @@ public class Refeicao extends AppCompatActivity {
                 break;
         }
 
-        //use weekday in title
         tvCanteen.setText(canteen);
         tvMeal.setText(cantinaArray.get(mealType).getMeal());
 
@@ -462,6 +487,7 @@ public class Refeicao extends AppCompatActivity {
                 tvDiversos.setText(cantinaArray.get(mealType).getDiversos());
             }
         }
+        //use weekday in title
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(ptWeekday);
         setSupportActionBar(toolbar);
@@ -481,7 +507,7 @@ public class Refeicao extends AppCompatActivity {
             return true;
         }
         if (item.getItemId() == R.id.menu_meal) {
-            trataJSON();
+            verificaMeal();
             return true;
         }
         return super.onOptionsItemSelected(item);

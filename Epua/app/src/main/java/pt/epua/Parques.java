@@ -1,11 +1,14 @@
 package pt.epua;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,11 +26,9 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,14 +42,16 @@ public class Parques extends AppCompatActivity {
     private int capacidade, livre;
     private float distancia;
 
+    private Location here, l;
+    private static final int REQUEST_CODE_PERMISSION = 2;
+
     private AdapterParques mAdapter;
 
     private RequestQueue queue;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private Location l, here;
-    private static final int REQUEST_CODE_PERMISSION = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,30 +73,7 @@ public class Parques extends AppCompatActivity {
             Log.a("HERE Lon: ", String.valueOf(lon));
         }
         */
-        //location API
-        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_PERMISSION);
-            return;
-        }
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            // Logic to handle location object
-                            here = location;
-                            double lat = location.getLatitude();
-                            double lon = location.getLongitude();
-                            Log.i("HERE Lat: ", String.valueOf(lat));
-                            Log.v("HERE Lon: ", String.valueOf(lon));
-                        }
-                    }
-                });
-
+        tracker();
 
         queue = Volley.newRequestQueue(this);
 
@@ -120,10 +100,11 @@ public class Parques extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Log.v("", "onRefresh called from SwipeRefreshLayout");
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
+                        tracker();
                         parseJSON();
+                        Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
@@ -133,6 +114,51 @@ public class Parques extends AppCompatActivity {
         //Back arrow
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
+    private void tracker() {
+        //location API
+        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_PERMISSION);
+            return;
+        }
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            here = location;
+                            double lat = here.getLatitude();
+                            double lon = here.getLongitude();
+                            Log.v("HERE Lat: ", String.valueOf(lat));
+                            Log.v("HERE Lon: ", String.valueOf(lon));
+                        } else {
+                            //Evita que o programa crashe quando o GPS está desligado
+                            //java.lang.NullPointerException: Attempt to read from field 'double android.location.Location.mLatitude' on a null object reference
+                            here = new Location("");
+                            gpsPrompt();
+                        }
+                    }
+                });
+    }
+
+    private void gpsPrompt() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Localização Desligada!");  // GPS not found
+        builder.setMessage("Activar?"); // Want to enable?
+        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        });
+        builder.setNegativeButton("Não", null);
+        builder.create();
+        builder.show();
+    }
+
 
         private void parseJSON() {
             String url = "http://services.web.ua.pt/parques/parques";
@@ -152,13 +178,10 @@ public class Parques extends AppCompatActivity {
                                     l.setLatitude(obj.getDouble("Latitude"));
                                     l.setLongitude(obj.getDouble("Longitude"));
 
-                                    Log.v("PARQUE Lat: ", String.valueOf(l.getLatitude()));
-                                    Log.v("PARQUE Lon: ", String.valueOf(l.getLongitude()));
-
                                     distancia = (l.distanceTo(here)) / 1000;
                                     distancia = (float) Math.round(distancia * 10) / 10;
-
                                     Log.v("Distancia: ", String.valueOf(distancia));
+
 
                                     if (livre > capacidade) livre = capacidade;
                                     if (livre < 0) livre = 0;
@@ -192,7 +215,6 @@ public class Parques extends AppCompatActivity {
 
             //Limpar a lista e parar o refresh
             parqueList.clear();
-            mSwipeRefreshLayout.setRefreshing(false);
         }
 
     @Override
@@ -204,14 +226,14 @@ public class Parques extends AppCompatActivity {
         }
         // Check if user triggered a refresh:
         if (item.getItemId() == R.id.menu_refresh) {
-            Log.v("", "Refresh menu item selected");
-
             // Signal SwipeRefreshLayout to start the progress indicator
             mSwipeRefreshLayout.setRefreshing(true);
-
             // Start the refresh background task.
             // This method calls setRefreshing(false) when it's finished.
+            tracker();
             parseJSON();
+            mSwipeRefreshLayout.setRefreshing(false);
+            Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);

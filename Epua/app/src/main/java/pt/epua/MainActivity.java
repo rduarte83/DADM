@@ -1,13 +1,10 @@
 package pt.epua;
-//TODO menu sobre?
-//TODO menu c opcoes : so mostar almocos, mudar tempo do timeout
-//TODO mudar layouts (performance)
-//TODO recycler view performance???
-//TODO mudar p jantar a partir duma determinada hora
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,75 +17,47 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity{
     private Context ctx;
     private CountDownTimer cdt;
-    private ProgressBar pb;
+    private ProgressBar pbar;
     private NumberPicker np;
-
-
-    public void createPicker () {
-        // Get the layout inflater
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // Inflate and set the layout for the dialog
-        LayoutInflater inflater = this.getLayoutInflater();
-        // dialog layout)
-        builder.setTitle("Defina o tempo (seg)");
-        builder.setMessage("Escolha um número:");
-
-        View dialogView = inflater.inflate(R.layout.dialog, null);
-        builder.setView(dialogView);
-        np = dialogView.findViewById(R.id.dialog_number_picker);
-        np.setMaxValue(60);
-        np.setMinValue(1);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        int timeout = np.getValue();
-                        Log.v("TIMEOUT: ", "" + timeout);
-                    }
-                });
-
-        builder.create();
-        builder.show();
-    }
-
+    private int timeout;
+    private SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        timeout = sharedpreferences.getInt("timeout", 5000);
+
         ctx = this.getApplicationContext();
 
-        ImageButton bt1 = findViewById(R.id.bt1);
-        ImageButton bt2 = findViewById(R.id.bt2);
+        ImageButton btEmentas = findViewById(R.id.btEmentas);
+        ImageButton btParques = findViewById(R.id.btParques);
 
-        pb = findViewById(R.id.pb);
+        final TextView tv_progress = findViewById(R.id.tvPbar);
 
-        Calendar calendar = new GregorianCalendar();
-        //data actual
-        Date now = calendar.getTime();
-        //hora actual
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        Log.v("AGORA: ", now.toString());
-        Log.v("HORA: ", String.valueOf(hour));
+        pbar = findViewById(R.id.pbar);
+
+
         //Start activity after timeout(ms)
-        final int timeout = 10000;
-
         cdt = new CountDownTimer (timeout, 1000) {
+            @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
-                int delta = (int)(timeout - millisUntilFinished)/(timeout/100);
-                pb.setProgress(delta);
-                Log.v("Remaining: ",String.valueOf(millisUntilFinished / 1000));
-                Log.v("Progress: ",String.valueOf(delta));
+
+                int delta = (int) (timeout - millisUntilFinished)/(timeout/100);
+                pbar.setProgress(delta);
+                tv_progress.setText(getString(R.string.progress)+ String.valueOf((millisUntilFinished / 1000)+1));
             }
             public void onFinish() {
-                pb.setVisibility(View.INVISIBLE);
+                pbar.setVisibility(View.GONE);
+                tv_progress.setVisibility(View.GONE);
                 Intent it = new Intent(ctx, Parques.class);
                 startActivity(it);
                 Log.v("Sucess","DONE!");
@@ -106,7 +75,7 @@ public class MainActivity extends AppCompatActivity{
 
         mHandler.postDelayed(runnable, timeout);*/
 
-        bt1.setOnClickListener(new View.OnClickListener() {
+        btEmentas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent it = new Intent(ctx, Cantinas.class);
@@ -114,10 +83,11 @@ public class MainActivity extends AppCompatActivity{
                 //Cancel Timer
                 //mHandler.removeCallbacks(runnable);
                 cdt.cancel();
-                pb.setVisibility(View.INVISIBLE);
+                pbar.setVisibility(View.GONE);
+                tv_progress.setVisibility(View.GONE);
             }
         });
-        bt2.setOnClickListener(new View.OnClickListener() {
+        btParques.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent it = new Intent(ctx, Parques.class);
@@ -125,9 +95,39 @@ public class MainActivity extends AppCompatActivity{
                 //Cancel Timer
                 //mHandler.removeCallbacks(runnable);
                 cdt.cancel();
-                pb.setVisibility(View.INVISIBLE);
+                pbar.setVisibility(View.GONE);
+                tv_progress.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void createPicker() {
+        // Get the layout inflater
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Inflate and set the layout for the dialog
+        LayoutInflater inflater = this.getLayoutInflater();
+        // dialog layout)
+        builder.setTitle("Defina o tempo (segundos)");
+        builder.setMessage("Escolha um número:");
+
+        View dialogView = inflater.inflate(R.layout.dialog_timeout, null);
+        builder.setView(dialogView);
+        np = dialogView.findViewById(R.id.dialog_number_picker);
+        np.setMaxValue(60);
+        np.setMinValue(1);
+        np.setValue(5);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                int timeout = np.getValue()*1000;
+                editor.putInt("timeout", timeout);
+                editor.apply();
+                Toast.makeText(ctx,"Tempo de arranque alterado com sucesso!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
     @Override
@@ -138,10 +138,10 @@ public class MainActivity extends AppCompatActivity{
             return true;
         }
         if (item.getItemId() == R.id.menu_timeout) {
+            cdt.cancel();
             createPicker();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
