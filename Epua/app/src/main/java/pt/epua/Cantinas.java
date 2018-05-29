@@ -22,25 +22,25 @@ public class Cantinas extends AppCompatActivity {
         setContentView(R.layout.activity_cantinas);
         ctx = this.getApplicationContext();
         TextView tv = findViewById(R.id.tv);
-        bt1 = findViewById(R.id.bt1);
-        bt2 = findViewById(R.id.bt2);
+        bt1 = findViewById(R.id.btEmentas);
+        bt2 = findViewById(R.id.btParques);
         bt3 = findViewById(R.id.bt3);
         bt4 = findViewById(R.id.bt4);
         bt5 = findViewById(R.id.bt5);
         bt6 = findViewById(R.id.bt6);
-        bt1.setText("SANTIAGO");
-        bt2.setText("CRASTO");
-        bt3.setText("SNACK-BAR");
-        bt4.setText("ESTGA");
-        bt5.setText("ESAN");
-        bt6.setText("RESTAURANTE UNIVERSITARIO");
+        bt1.setText(R.string.santiago);
+        bt2.setText(R.string.crasto);
+        bt3.setText(R.string.snackBar);
+        bt4.setText(R.string.estga);
+        bt5.setText(R.string.esan);
+        bt6.setText(R.string.restUniv);
 
-        tv.setText("Escolha a cantina:");
+        tv.setText(R.string.pickCanteen);
 
         bt1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(ctx, Refeicao.class);
+                Intent it = new Intent(ctx, Ementa.class);
                 it.putExtra("bt_txt", bt1.getText());
                 startActivity(it);
             }
@@ -48,7 +48,7 @@ public class Cantinas extends AppCompatActivity {
         bt2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(ctx, Refeicao.class);
+                Intent it = new Intent(ctx, Ementa.class);
                 it.putExtra("bt_txt", bt2.getText());
                 startActivity(it);
             }
@@ -56,7 +56,7 @@ public class Cantinas extends AppCompatActivity {
         bt3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(ctx, Refeicao.class);
+                Intent it = new Intent(ctx, Ementa.class);
                 it.putExtra("bt_txt", bt3.getText());
                 startActivity(it);
             }
@@ -64,7 +64,7 @@ public class Cantinas extends AppCompatActivity {
         bt4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(ctx, Refeicao.class);
+                Intent it = new Intent(ctx, Ementa.class);
                 it.putExtra("bt_txt", bt4.getText());
                 startActivity(it);
             }
@@ -72,7 +72,7 @@ public class Cantinas extends AppCompatActivity {
         bt5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(ctx, Refeicao.class);
+                Intent it = new Intent(ctx, Ementa.class);
                 it.putExtra("bt_txt", bt5.getText());
                 startActivity(it);
             }
@@ -80,7 +80,7 @@ public class Cantinas extends AppCompatActivity {
         bt6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(ctx, Refeicao.class);
+                Intent it = new Intent(ctx, Ementa.class);
                 it.putExtra("bt_txt", bt6.getText());
                 startActivity(it);
             }

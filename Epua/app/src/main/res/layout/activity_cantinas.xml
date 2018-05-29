@@ -18,7 +18,7 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/bt1"
+        android:id="@+id/btEmentas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv"
@@ -27,10 +27,10 @@
         android:textColor="@color/cardview_light_background" />
 
     <Button
-        android:id="@+id/bt2"
+        android:id="@+id/btParques"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bt1"
+        android:layout_below="@+id/btEmentas"
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimary"
         android:textColor="@color/cardview_light_background" />
@@ -39,7 +39,7 @@
         android:id="@+id/bt3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bt2"
+        android:layout_below="@+id/btParques"
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimary"
         android:textColor="@color/cardview_light_background" />
