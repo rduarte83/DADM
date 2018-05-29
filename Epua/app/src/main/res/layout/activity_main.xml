@@ -8,17 +8,18 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_width="256dp"
+        android:layout_height="128dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
         app:srcCompat="@drawable/logo_ua"
         android:contentDescription="@string/iv_logo"
         tools:targetApi="26" />
 
     <TextView
-        android:id="@+id/tvEpua"
+        android:id="@+id/tvapp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -37,37 +38,44 @@
         android:layout_marginBottom="60dp">
 
         <ImageButton
-            android:id="@+id/btEmentas"
+            android:id="@+id/bt1"
             android:src="@drawable/ementa"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            android:layout_toStartOf="@id/separator"
+            android:layout_toStartOf="@id/sep"
             android:contentDescription="@string/bt_ementas"
             android:scaleType="fitCenter" />
 
         <TextView
-            android:id="@+id/separator"
+            android:id="@+id/sep"
             android:layout_width="wrap_content"
             android:layout_height="128dp"
             android:layout_centerHorizontal="true" />
 
         <ImageButton
-            android:id="@+id/btParques"
+            android:id="@+id/bt2"
             android:src="@drawable/parque"
             android:layout_width="128dp"
             android:layout_height="128dp"
-            android:layout_toEndOf="@id/separator"
+            android:layout_toEndOf="@id/sep"
             android:contentDescription="@string/bt_parques"
             android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/sepI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/sep"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/separator">
+            android:layout_below="@id/sep">
 
             <TextView
-                android:id="@+id/tv_parques"
+                android:id="@+id/tv1"
                 android:layout_width="128dp"
                 android:layout_height="wrap_content"
                 android:text="@string/tv_ementas"
@@ -75,7 +83,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/tv_ementas"
+                android:id="@+id/tv2"
                 android:layout_width="128dp"
                 android:layout_height="wrap_content"
                 android:text="@string/tv_parques"
@@ -85,24 +93,15 @@
     </RelativeLayout>
 
 
-    <TextView
-        android:id="@+id/tvPbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/pbar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-        tools:targetApi="26" />
-
     <ProgressBar
-        android:id="@+id/pbar"
+        android:id="@+id/pb"
         style="?android:attr/progressBarStyleHorizontal"
+        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+        android:layout_centerHorizontal="true"
         tools:targetApi="26" />
 
 </RelativeLayout>

@@ -22,13 +22,5 @@
     <string name="tv_distancia">Km</string>
     <string name="iv_status">status</string>
     <string name="iv_logo">logo</string>
-    <string name="menu_timeout">Arranque</string>
-    <string name="progress">Arranque automático em</string>
-    <string name="santiago">SANTIAGO</string>
-    <string name="crasto">CRASTO</string>
-    <string name="snackBar">SNACK-BAR</string>
-    <string name="estga">ESTGA</string>
-    <string name="esan">ESAN</string>
-    <string name="restUniv">RESTAURANTE UNIVERSITARIO</string>
-    <string name="pickCanteen">Escolha a cantina:</string>
+    <string name="menu_timeout">Timeout</string>
 </resources>
