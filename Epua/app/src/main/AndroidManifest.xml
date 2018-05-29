@@ -30,7 +30,6 @@
         <activity
             android:name=".Parques"
             android:label="@string/title_activity_parques" />
-
     </application>
 
 </manifest>
