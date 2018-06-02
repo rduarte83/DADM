@@ -23,7 +23,7 @@
     <string name="iv_status">status</string>
     <string name="iv_logo">logo</string>
     <string name="menu_timeout">Arranque</string>
-    <string name="progress">Arranque automático em</string>
+    <string name="progress">Arranque automático em \u0020</string>
     <string name="santiago">SANTIAGO</string>
     <string name="crasto">CRASTO</string>
     <string name="snackBar">SNACK-BAR</string>

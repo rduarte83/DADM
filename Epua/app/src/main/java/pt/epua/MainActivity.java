@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,6 @@ import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity{
     private Context ctx;
@@ -107,10 +107,10 @@ public class MainActivity extends AppCompatActivity{
         // Inflate and set the layout for the dialog
         LayoutInflater inflater = this.getLayoutInflater();
         // dialog layout)
-        builder.setTitle("Defina o tempo (segundos)");
+        builder.setTitle("Defina o tempo (segundos):");
         builder.setMessage("Escolha um número:");
 
-        View dialogView = inflater.inflate(R.layout.dialog_timeout, null);
+        final View dialogView = inflater.inflate(R.layout.dialog_timeout, null);
         builder.setView(dialogView);
         np = dialogView.findViewById(R.id.dialog_number_picker);
         np.setMaxValue(60);
@@ -123,7 +123,11 @@ public class MainActivity extends AppCompatActivity{
                 int timeout = np.getValue()*1000;
                 editor.putInt("timeout", timeout);
                 editor.apply();
-                Toast.makeText(ctx,"Tempo de arranque alterado com sucesso!", Toast.LENGTH_SHORT).show();
+
+                View snackbarLayout = findViewById(R.id.snackbarLayout);
+                Snackbar snackbar = Snackbar.make(snackbarLayout, "Tempo de arranque alterado com sucesso!", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+
             }
         });
         builder.create();

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -104,7 +106,10 @@ public class Parques extends AppCompatActivity {
                         // The method calls setRefreshing(false) when it's finished.
                         tracker();
                         parseJSON();
-                        Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
+                        View snackbarLayout = findViewById(R.id.snackbarLayout);
+                        //Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
+                        Snackbar snackbar = Snackbar.make(snackbarLayout, "Actualização efectuada com sucesso!", Snackbar.LENGTH_SHORT);
+                        snackbar.show();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
@@ -233,7 +238,12 @@ public class Parques extends AppCompatActivity {
             tracker();
             parseJSON();
             mSwipeRefreshLayout.setRefreshing(false);
-            Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
+
+            //Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
+            View snackbarLayout = findViewById(R.id.snackbarLayout);
+            //Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
+            Snackbar snackbar = Snackbar.make(snackbarLayout, "Actualização efectuada com sucesso!", Snackbar.LENGTH_SHORT);
+            snackbar.show();
             return true;
         }
         return super.onOptionsItemSelected(item);
