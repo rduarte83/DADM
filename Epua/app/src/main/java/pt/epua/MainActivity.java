@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity{
     private Context ctx;
     private CountDownTimer cdt;
     private ProgressBar pbar;
+    private TextView tv_progress;
     private NumberPicker np;
     private int timeout;
     private SharedPreferences sharedpreferences;
@@ -34,26 +35,27 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         sharedpreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        timeout = sharedpreferences.getInt("timeout", 5000);
 
         ctx = this.getApplicationContext();
 
         ImageButton btEmentas = findViewById(R.id.btEmentas);
         ImageButton btParques = findViewById(R.id.btParques);
 
-        final TextView tv_progress = findViewById(R.id.tvPbar);
+        tv_progress = findViewById(R.id.tvPbar);
 
         pbar = findViewById(R.id.pbar);
 
 
         //Start activity after timeout(ms)
+        timeout = sharedpreferences.getInt("timeout", 5000);
+
         cdt = new CountDownTimer (timeout, 1000) {
-            @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
 
                 int delta = (int) (timeout - millisUntilFinished)/(timeout/100);
                 pbar.setProgress(delta);
-                tv_progress.setText(getString(R.string.progress)+ String.valueOf((millisUntilFinished / 1000)+1));
+                String progress = getString(R.string.progress)+ String.valueOf((millisUntilFinished / 1000)+1);
+                tv_progress.setText(progress);
             }
             public void onFinish() {
                 pbar.setVisibility(View.GONE);
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
                 Log.v("Sucess","DONE!");
             }
         }.start();
-
+        //Countdown timer por handler
         /*final Handler mHandler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
@@ -110,12 +112,21 @@ public class MainActivity extends AppCompatActivity{
         builder.setTitle("Defina o tempo (segundos):");
         builder.setMessage("Escolha um número:");
 
-        final View dialogView = inflater.inflate(R.layout.dialog_timeout, null);
+        @SuppressLint("InflateParams") final View dialogView = inflater.inflate(R.layout.dialog_timeout, null);
         builder.setView(dialogView);
         np = dialogView.findViewById(R.id.dialog_number_picker);
         np.setMaxValue(60);
         np.setMinValue(1);
-        np.setValue(5);
+
+        //check timeout value in prefs
+        if (timeout == 0) {
+            //default 5seg
+            np.setValue(5);
+        } else {
+            sharedpreferences.getInt("timeout", timeout);
+            np.setValue(timeout/1000);
+        }
+
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
@@ -123,11 +134,10 @@ public class MainActivity extends AppCompatActivity{
                 int timeout = np.getValue()*1000;
                 editor.putInt("timeout", timeout);
                 editor.apply();
-
+                //Toast.makeText(ctx,"Tempo de arranque alterado com sucesso!", Toast.LENGTH_SHORT).show();
                 View snackbarLayout = findViewById(R.id.snackbarLayout);
-                Snackbar snackbar = Snackbar.make(snackbarLayout, "Tempo de arranque alterado com sucesso!", Snackbar.LENGTH_SHORT);
+                Snackbar snackbar = Snackbar.make(snackbarLayout, R.string.sb_bootTime, Snackbar.LENGTH_LONG);
                 snackbar.show();
-
             }
         });
         builder.create();
@@ -143,6 +153,8 @@ public class MainActivity extends AppCompatActivity{
         }
         if (item.getItemId() == R.id.menu_timeout) {
             cdt.cancel();
+            pbar.setVisibility(View.GONE);
+            tv_progress.setVisibility(View.GONE);
             createPicker();
             return true;
         }

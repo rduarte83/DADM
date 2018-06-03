@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,40 +43,21 @@ public class Parques extends AppCompatActivity {
     private Parque parque;
     private String id, nome;
     private int capacidade, livre;
-    private float distancia;
-
-    private Location here, l;
-    private static final int REQUEST_CODE_PERMISSION = 2;
-
     private AdapterParques mAdapter;
-
     private RequestQueue queue;
-
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-
+    private static final int REQUEST_LOCATION_PERMISSION = 2;
+    private float distancia;
+    private Location here, l;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parques);
-        /*
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_PERMISSION);
-            return;
-        }
-
-        if (lm != null) {
-            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double lat = location.getLatitude();
-            double lon = location.getLongitude();
-            Log.a("HERE Lat: ", String.valueOf(lat));
-            Log.a("HERE Lon: ", String.valueOf(lon));
-        }
-        */
-        tracker();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         queue = Volley.newRequestQueue(this);
 
@@ -104,49 +86,22 @@ public class Parques extends AppCompatActivity {
                     public void onRefresh() {
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
-                        tracker();
+                        getLocation();
                         parseJSON();
-                        View snackbarLayout = findViewById(R.id.snackbarLayout);
                         //Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
-                        Snackbar snackbar = Snackbar.make(snackbarLayout, "Actualização efectuada com sucesso!", Snackbar.LENGTH_SHORT);
+                        View snackbarLayout = findViewById(R.id.snackbarLayout);
+                        Snackbar snackbar = Snackbar.make(snackbarLayout, R.string.sb_updateSucess, Snackbar.LENGTH_LONG);
                         snackbar.show();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
         );
+        getLocation();
 
         parseJSON();
+
         //Back arrow
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-    }
-    private void tracker() {
-        //location API
-        FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_PERMISSION);
-            return;
-        }
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            // Logic to handle location object
-                            here = location;
-                            double lat = here.getLatitude();
-                            double lon = here.getLongitude();
-                            Log.v("HERE Lat: ", String.valueOf(lat));
-                            Log.v("HERE Lon: ", String.valueOf(lon));
-                        } else {
-                            //Evita que o programa crashe quando o GPS está desligado
-                            //java.lang.NullPointerException: Attempt to read from field 'double android.location.Location.mLatitude' on a null object reference
-                            here = new Location("");
-                            gpsPrompt();
-                        }
-                    }
-                });
     }
 
     private void gpsPrompt() {
@@ -164,63 +119,104 @@ public class Parques extends AppCompatActivity {
         builder.show();
     }
 
-
-        private void parseJSON() {
-            String url = "http://services.web.ua.pt/parques/parques";
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                for (int i = 1; i < response.length(); i++) {
-                                    JSONObject obj = response.getJSONObject(i);
-                                    id = obj.getString("ID");
-                                    nome = obj.getString("Nome");
-                                    capacidade = obj.getInt("Capacidade");
-                                    livre = obj.getInt("Livre");
-
-                                    l = new Location("");
-                                    l.setLatitude(obj.getDouble("Latitude"));
-                                    l.setLongitude(obj.getDouble("Longitude"));
-
-                                    distancia = (l.distanceTo(here)) / 1000;
-                                    distancia = (float) Math.round(distancia * 10) / 10;
-                                    Log.v("Distancia: ", String.valueOf(distancia));
-
-
-                                    if (livre > capacidade) livre = capacidade;
-                                    if (livre < 0) livre = 0;
-
-                                    parque = new Parque(id, nome, capacidade, livre, distancia);
-                                    parqueList.add(parque);
-
-                                    mAdapter.notifyDataSetChanged();
-                                }
-                                //Sort do array por distância
-                                Collections.sort(parqueList, new Comparator<Parque>() {
-                                    public int compare(Parque p1, Parque p2) {
-                                        return  Float.compare(p1.getDistancia(), p2.getDistancia());
-                                    }
-                                });
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, new Response.ErrorListener() {
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]
+                    {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        } else {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
+                public void onSuccess(Location location) {
+                    // Got last known location. In some rare situations this can be null.
+                    if (location != null) {
+                        // Logic to handle location object
+                        here = location;
+                        double lat = here.getLatitude();
+                        double lon = here.getLongitude();
+                        Log.v("HERE Lat: ", String.valueOf(lat));
+                        Log.v("HERE Lon: ", String.valueOf(lon));
+                    } else {
+                        //Evita que o programa crashe quando o GPS está desligado
+                        //java.lang.NullPointerException: Attempt to read from field 'double android.location.Location.mLatitude' on a null object reference
+                        here = new Location("");
+                        gpsPrompt();
+                    }
                 }
             });
-
-            //Limpar a cache
-            queue.getCache().clear();
-
-            queue.add(request);
-
-            //Limpar a lista e parar o refresh
-            parqueList.clear();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_LOCATION_PERMISSION:
+                // If the permission is granted, get the location,
+                // otherwise, alertdialog
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getLocation();
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.t_permission, Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+    }
+
+    private void parseJSON() {
+        String url = "http://services.web.ua.pt/parques/parques";
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 1; i < response.length(); i++) {
+                                JSONObject obj = response.getJSONObject(i);
+                                id = obj.getString("ID");
+                                nome = obj.getString("Nome");
+                                capacidade = obj.getInt("Capacidade");
+                                livre = obj.getInt("Livre");
+
+                                l = new Location("");
+                                l.setLatitude(obj.getDouble("Latitude"));
+                                l.setLongitude(obj.getDouble("Longitude"));
+
+                                distancia = (l.distanceTo(here)) / 1000;
+                                distancia = (float) Math.round(distancia * 10) / 10;
+                                Log.v("Distancia: ", String.valueOf(distancia));
+
+
+                                if (livre > capacidade) livre = capacidade;
+                                if (livre < 0) livre = 0;
+
+                                parque = new Parque(id, nome, capacidade, livre, distancia);
+                                parqueList.add(parque);
+
+                                mAdapter.notifyDataSetChanged();
+                            }
+                            //Sort do array por distância
+                            Collections.sort(parqueList, new Comparator<Parque>() {
+                                public int compare(Parque p1, Parque p2) {
+                                    return Float.compare(p1.getDistancia(), p2.getDistancia());
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        //Limpar a cache
+        queue.getCache().clear();
+        queue.add(request);
+
+        //Limpar a lista
+        parqueList.clear();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -235,14 +231,12 @@ public class Parques extends AppCompatActivity {
             mSwipeRefreshLayout.setRefreshing(true);
             // Start the refresh background task.
             // This method calls setRefreshing(false) when it's finished.
-            tracker();
+            getLocation();
             parseJSON();
             mSwipeRefreshLayout.setRefreshing(false);
 
-            //Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
             View snackbarLayout = findViewById(R.id.snackbarLayout);
-            //Toast.makeText(getApplicationContext(),"Actualização efectuada com sucesso!", Toast.LENGTH_SHORT).show();
-            Snackbar snackbar = Snackbar.make(snackbarLayout, "Actualização efectuada com sucesso!", Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = Snackbar.make(snackbarLayout, R.string.sb_updateSucess, Snackbar.LENGTH_LONG);
             snackbar.show();
             return true;
         }

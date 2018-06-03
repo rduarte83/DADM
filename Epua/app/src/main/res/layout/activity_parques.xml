@@ -49,7 +49,8 @@
                 android:text="@string/tv_distancia"
                 android:textAlignment="center"
                 android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
 
             <TextView
                 android:id="@+id/tv_livre"

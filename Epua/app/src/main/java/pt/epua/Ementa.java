@@ -40,8 +40,8 @@ public class Ementa extends AppCompatActivity {
     private TextView tvSobremesa;
     private Cantina cantina;
     private String zona, canteen, weekday, meal, sopa, carne, peixe, dieta, veget, opcao, salada, diversos, sobremesa, disabled;
-    private final String nd = "Não disponível";
-    private final String encerrado = "Encerrado";
+    private final String nd = getString(R.string.nd);
+    private final String encerrado = getString(R.string.encerrado);
     private int mealType;
 
     @Override
@@ -68,7 +68,6 @@ public class Ementa extends AppCompatActivity {
 
         parseJSON();
         invalidateOptionsMenu();
-
     }
 
     private void parseJSON() {
@@ -412,8 +411,6 @@ public class Ementa extends AppCompatActivity {
 
             TextView tvDisabled = findViewById(R.id.tv_disabled);
             tvDisabled.setText(cantinaArray.get(mealType).getDisabled());
-
-
         } else {
             card_disable.setVisibility(View.GONE);
             card_sopa.setVisibility(View.VISIBLE);

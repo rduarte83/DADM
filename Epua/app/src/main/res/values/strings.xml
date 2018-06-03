@@ -31,4 +31,9 @@
     <string name="esan">ESAN</string>
     <string name="restUniv">RESTAURANTE UNIVERSITARIO</string>
     <string name="pickCanteen">Escolha a cantina:</string>
+    <string name="sb_updateSucess">Actualização efectuada com sucesso!</string>
+    <string name="sb_bootTime">Tempo de arranque alterado com sucesso!</string>
+    <string name="t_permission">Permissão negada!.</string>
+    <string name="nd">Não disponível</string>
+    <string name="encerrado">Encerrado</string>
 </resources>

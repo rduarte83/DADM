@@ -44,7 +44,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_margin="5dp"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
 
             <TextView
                 android:id="@+id/tv_distancia"
@@ -56,7 +57,8 @@
                 android:paddingEnd="10dp"
                 android:textAlignment="textEnd"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
 
             <ImageView
                 android:id="@+id/tv_status"
