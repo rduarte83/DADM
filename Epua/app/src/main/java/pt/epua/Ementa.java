@@ -49,7 +49,6 @@ public class Ementa extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ementa);
         zona = Objects.requireNonNull(this.getIntent().getExtras()).getString("bt_txt");
-
         cantinaArray = new ArrayList<>();
 
         queue = Volley.newRequestQueue(this);
