@@ -36,12 +36,12 @@
 
         <ImageButton
             android:id="@+id/btEmentas"
-            android:src="@drawable/ementa"
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:layout_toStartOf="@id/separator"
             android:contentDescription="@string/bt_ementas"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ementa" />
 
         <TextView
             android:id="@+id/separator"

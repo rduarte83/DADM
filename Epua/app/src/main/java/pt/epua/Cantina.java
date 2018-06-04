@@ -1,6 +1,7 @@
 package pt.epua;
 
 class Cantina {
+    @SuppressWarnings("unused")
     private final String canteen;
     private final String meal;
     private final String weekday;
