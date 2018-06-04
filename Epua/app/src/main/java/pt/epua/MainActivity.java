@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity{
         // Inflate and set the layout for the dialog
         LayoutInflater inflater = this.getLayoutInflater();
         // dialog layout)
-        builder.setTitle("Defina o tempo (segundos):");
-        builder.setMessage("Escolha um número:");
+        builder.setTitle(R.string.picker_title);
+        builder.setMessage(R.string.picker_msg);
 
         @SuppressLint("InflateParams") final View dialogView = inflater.inflate(R.layout.dialog_timeout, null);
         builder.setView(dialogView);

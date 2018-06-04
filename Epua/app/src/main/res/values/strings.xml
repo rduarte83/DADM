@@ -36,4 +36,10 @@
     <string name="t_permission">Permissão negada!.</string>
     <string name="nd">Não disponível</string>
     <string name="encerrado">Encerrado</string>
+    <string name="picker_title">Defina o tempo (segundos):</string>
+    <string name="picker_msg">Escolha um número:</string>
+    <string name="gps_title">Localização Desligada!</string>
+    <string name="gps_msg">Activar?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 </resources>

@@ -106,15 +106,15 @@ public class Parques extends AppCompatActivity {
 
     private void gpsPrompt() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Localização Desligada!");  // GPS not found
-        builder.setMessage("Activar?"); // Want to enable?
-        builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.gps_title);  // GPS not found
+        builder.setMessage(R.string.gps_msg); // Want to enable?
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
         });
-        builder.setNegativeButton("Não", null);
+        builder.setNegativeButton(R.string.no, null);
         builder.create();
         builder.show();
     }
