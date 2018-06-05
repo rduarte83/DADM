@@ -40,8 +40,8 @@ public class Ementa extends AppCompatActivity {
     private TextView tvSobremesa;
     private Cantina cantina;
     private String zona, canteen, weekday, meal, sopa, carne, peixe, dieta, veget, opcao, salada, diversos, sobremesa, disabled;
-    private final String nd = getString(R.string.nd);
-    private final String encerrado = getString(R.string.encerrado);
+    private final String nd = "Não disponível";
+    private final String encerrado = "Encerrado";
     private int mealType;
 
     @Override

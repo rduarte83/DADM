@@ -34,8 +34,6 @@
     <string name="sb_updateSucess">Actualização efectuada com sucesso!</string>
     <string name="sb_bootTime">Tempo de arranque alterado com sucesso!</string>
     <string name="t_permission">Permissão negada!.</string>
-    <string name="nd">Não disponível</string>
-    <string name="encerrado">Encerrado</string>
     <string name="picker_title">Defina o tempo (segundos):</string>
     <string name="picker_msg">Escolha um número:</string>
     <string name="gps_title">Localização Desligada!</string>
